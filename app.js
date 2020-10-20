@@ -10,7 +10,81 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
+function promptUser() {
+    return inquirer.prompt([
+         {
+            type: "list",
+            message: "Select your employee role.",
+            name: "role",
+            choices: ["Manager", "Engineer", "Intern"]
+        },
+        {
+            type: "input",
+            name: "name",
+            message: "What is the employee's name?"
+        },
+        {
+            type: "input",
+            name: "id",
+            message: "What is the employee's ID?"
+        },
+        {
+            type: "input",
+            name: "email",
+            message: "What is the employee's email address?"
+        },
+        {
+            type: "input",
+            name: "officeNumber",
+            message: "What is the manager's office number?",
+            when: (answers) => answers.role === 'Manager'
+        },
+        {
+            type: "input",
+            name: "github",
+            message: "What is the engineer's Github username?",
+            when: (answers) => answers.role === 'Engineer'
+        },
+        {
+            type: "input",
+            name: "school",
+            message: "What school did the intern go to?",
+            when: (answers) => answers.role === 'Intern'
+        },
+        // {
+        //     type: 'confirm',
+        //     name: 'again',
+        //     message: 'Enter another employee? ',
+        //     default: true
+        //   }
+    ])
+}
+var employees = [];
+promptUser()
+    .then(function (employeeData) {
+        var employee;
+        if(employeeData.role === "Intern") {
+            employee = new Intern(employeeData.name, employeeData.id, employeeData.email, employeeData.school, employeeData.role)
+        }else if (employeeData.role === "Engineer") {
+            employee = new Engineer(employeeData.name, employeeData.id, employeeData.email, employeeData.github, employeeData.role)
+        }else {
+            employee = new Manager(employeeData.name, employeeData.id, employeeData.email, employeeData.officeNumber, employeeData.role)
+        }
+        
+        
+        employees.push(employee);
+    })
+    .then(function () {
+        var html = render(employees);
+        return fs.writeFileSync(outputPath, html);
+    })
+    .catch(function (err) {
+        console.log(err);
+    }).then((data) => {
 
+    });
+// promptUser().then(render(answers))
+       
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
