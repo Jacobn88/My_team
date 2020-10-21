@@ -5,4 +5,4 @@ This command line tool allows you to dynamicly create an HTML page for a team of
 
 ## My_team in action
 https://drive.google.com/file/d/1PeLXaHyJvFGAEdo2xPdhUjJTTcyuw5MC/view
-![](images/My_team.png)
+![](images/My_team.PNG)
